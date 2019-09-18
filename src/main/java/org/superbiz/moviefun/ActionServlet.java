@@ -16,9 +16,12 @@
  */
 package org.superbiz.moviefun;
 
-import org.apache.commons.lang.StringUtils;
+//import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
-import javax.ejb.EJB;
+//import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,13 +32,14 @@ import java.util.List;
 /**
  * @version $Revision$ $Date$
  */
+@Component("actionServlet1")
 public class ActionServlet extends HttpServlet {
 
     private static final long serialVersionUID = -5832176047021911038L;
 
     public static int PAGE_SIZE = 5;
 
-    @EJB
+    @Autowired
     private MoviesBean moviesBean;
 
     @Override
