@@ -23,6 +23,7 @@ public class S3Store implements BlobStore {
 
         ObjectMetadata om = new ObjectMetadata();
         om.setContentType(blob.contentType);
+        om.setContentLength(blob.inputStream.available());
 
         s3Client.putObject(photoStorageBucket, blob.name, blob.inputStream, om);
     }

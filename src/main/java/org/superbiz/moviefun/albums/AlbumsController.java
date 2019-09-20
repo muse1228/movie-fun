@@ -1,6 +1,7 @@
 package org.superbiz.moviefun.albums;
 
 import org.apache.tika.Tika;
+import org.apache.tika.io.IOUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,15 +14,14 @@ import org.superbiz.moviefun.blobstore.BlobStore;
 import org.superbiz.moviefun.blobstore.FileStore;
 import sun.nio.ch.FileChannelImpl;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.channels.Channels;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.lang.ClassLoader.getSystemResource;
 import static java.lang.String.format;
@@ -71,10 +71,11 @@ public class AlbumsController {
         }
 
         Blob blob = blobOptioanl.get();
-        int fileSize = blob.inputStream.available();
+        byte[] bytes = IOUtils.toByteArray(blob.inputStream);
+        int fileSize = bytes.length;
+
         HttpHeaders headers = createImageHttpHeaders(blob.contentType, fileSize);
 
-        byte[] bytes = new byte[fileSize];
         blob.inputStream.read(bytes);
         return new HttpEntity<>(bytes, headers);
     }
