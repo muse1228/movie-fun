@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.superbiz.moviefun.blobstore.Blob;
 import org.superbiz.moviefun.blobstore.BlobStore;
 
@@ -39,6 +40,7 @@ public class AlbumsUpdater {
         objectReader = new CsvMapper().readerFor(Album.class).with(schema);
     }
 
+    @Transactional
     public void update() throws IOException {
         Optional<Blob> maybeBlob = blobStore.get("albums.csv");
 
@@ -54,7 +56,6 @@ public class AlbumsUpdater {
         deleteOldAlbums(albumsToHave, albumsWeHave);
         updateExistingAlbums(albumsToHave, albumsWeHave);
     }
-
 
     private void createNewAlbums(List<Album> albumsToHave, List<Album> albumsWeHave) {
         Stream<Album> albumsToCreate = albumsToHave
